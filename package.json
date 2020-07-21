@@ -1,0 +1,22 @@
+{
+  "name": "artic",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "EventEmitter": "^1.0.0",
+    "autosize": "^4.0.2",
+    "axios": "^0.19.2",
+    "date-fns": "^2.15.0",
+    "lodash": "^4.17.19",
+    "vue": "^3.0.0-rc.1",
+    "vue2-editor": "^2.10.2",
+    "vuedraggable": "^2.24.0"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.0.0-rc.1",
+    "vite": "^1.0.0-rc.1"
+  }
+}
