@@ -37,6 +37,10 @@
             element: Object
         },
 
+        mounted(){
+            console.log("UI element mounted!");
+        },
+
         data: function(){
             return{
                 component: null,

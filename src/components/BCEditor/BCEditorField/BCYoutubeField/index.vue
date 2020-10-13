@@ -195,7 +195,7 @@ export default {
             immediate: true, 
             handler (val, oldVal) {
                 if(val != null){
-                    this.$emit("input", val);
+                    this.$emit("update:modelValue", val);
                     const match = this._parseYoutubeUrl(val);
                     if(match)
                         this.embed = `https://www.youtube.com/embed/${match[2]}?rel=0&amp;showinfo=0`;

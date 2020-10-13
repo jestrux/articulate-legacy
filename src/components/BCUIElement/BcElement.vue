@@ -45,7 +45,7 @@
 
 
                     outerDiv.innerHTML = html;
-                    this.$emit('input', outerDiv.outerHTML);
+                    this.$emit('update:modelValue', outerDiv.outerHTML);
                 }
             }
         }

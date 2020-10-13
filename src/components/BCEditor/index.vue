@@ -108,7 +108,8 @@
 
                     <bc-editor-field
                         :nolabel="element.component === 'bc-text'"
-                        v-model="fields[index]"
+                        :modelValue="field"
+                        @update:modelValue="field = $event"
                     />
 
                 </div>
@@ -127,6 +128,7 @@ import _ from 'lodash'
 import BCEditorField from './BCEditorField/index.vue';
 
 export default {
+    name: "BcEditor",
     methods: {
         cancelEditting: function(){
             this.$emit('cancel');

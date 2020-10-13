@@ -1,5 +1,5 @@
-var axios = require('axios');
-var _ = require('lodash');
+import axios from 'axios';
+import * as _ from 'lodash';
 
 var ROOT_URL = 'https://www.googleapis.com/youtube/v3/search';
 

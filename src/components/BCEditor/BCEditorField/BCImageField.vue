@@ -157,7 +157,9 @@
             <unsplash-search
                 :client-id="unsplashClientId"
                 per-page="6"
-                v-else-if="unsplashClientId && unsplashClientId.length && source === 2" v-model="src"/>
+                v-else-if="unsplashClientId && unsplashClientId.length && source === 2" 
+                v-model="src"
+            />
 
             <file-uploader 
                 v-else-if="source === 0 && imageUploadUrl && imageUploadUrl.length" v-model="src"
@@ -175,16 +177,21 @@ import FileUploader from "./FileUploader/index.vue";
 import UnsplashSearch from "./UnsplashSearch.vue";
 
 export default {
+    name: "BcImageField",
     props: {
         url: String
     },
     mounted(){
-        const parent = this.$root.$children[0];
-        this.imageUploadUrl = parent.imageUploadUrl;
-        this.unsplashClientId = parent.unsplashClientId;
+        // const parent = this.$root.$children[0];
+        // this.imageUploadUrl = parent.imageUploadUrl;
+        // this.unsplashClientId = parent.unsplashClientId;
 
-        this.source = this.imageUploadUrl && this.imageUploadUrl.length ? 0 : 1;
-        this.src = this.url && this.url.length ? this.url : null;
+        // this.source = this.imageUploadUrl && this.imageUploadUrl.length ? 0 : 1;
+        // this.src = this.url && this.url.length ? this.url : null;
+
+        const { imageUploadUrl, unsplashClientId } = window.ArticulateOptions;
+        this.imageUploadUrl = imageUploadUrl;
+        this.unsplashClientId = unsplashClientId;
     },
     data() {
         return {
@@ -201,7 +208,7 @@ export default {
             immediate: true, 
             handler (val, oldVal) {
                 if(val != null)
-                    this.$emit("input", val);
+                    this.$emit("update:modelValue", val);
             }
         }
     },

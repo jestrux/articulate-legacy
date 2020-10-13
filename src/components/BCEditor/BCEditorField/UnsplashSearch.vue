@@ -193,7 +193,8 @@
         })
       },
       selectImage(url){
-        this.$emit("input", url)
+        console.log("Image selected: ",);
+        this.$emit("update:modelValue", url)
       }
     }
   }

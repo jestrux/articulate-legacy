@@ -13,7 +13,21 @@
                 :pos="emojiPosition"
                 @selected="pushEmoji(element.id, $event)"/>
 
-            <vue-editor
+
+            <quill-editor
+                ref="inlineEditor"
+                :placeholder="element.options.default" 
+                class="inline-editor" 
+                :class="{'focused' : element.focused}"
+                :value="element.options.text"
+                @input="input"
+                @focus="elementToggleFocus($event)"
+                @blur="elementToggleFocus($event, false)"
+                @text-change="textChanged($event)"
+                @selection-change="selectionChanged($event)"
+            />
+
+            <!-- <vue-editor
                 :placeholder="element.options.default" 
                 ref="inlineEditor"
                 class="inline-editor" 
@@ -31,7 +45,7 @@
                 @keyup.native.189="dashClicked(element.id)"
                 @keyup.native.shift.186="colonClicked(element.id)"
                 @keyup.native.enter="enterClicked(element.id)"
-                @keyup.native.exact="onKeyUp($event, element.id)" />
+                @keyup.native.exact="onKeyUp($event, element.id)" /> -->
 
                 <!-- @keyup.native.shift.enter="enterClicked(element.id)" -->
                 <!-- v-model="element.options.html" -->
@@ -41,20 +55,23 @@
 
 <script>
 import { VueEditor, Quill } from 'vue2-editor';
+import QuillEditor from './QuillEditor.vue';
 import EmojiAutoComplete from './EmojiAutoComplete/index.vue';
 
 export default {
     props: {
-        value: Object
+        modelValue: Object
     },
     components : {
         'vue-editor': VueEditor,
+        'quill-editor': QuillEditor,
         'emoji-autocomplete': EmojiAutoComplete
     },
     mounted(){
-        console.log("Text element init: ", this.value);
-        if(this.value)
-            this.element = this.value;
+        if(this.modelValue){
+            const { name, label, id, options } = this.modelValue;
+            this.element = this.modelValue;
+        }
     },
     data(){
         return {
@@ -62,19 +79,15 @@ export default {
             quill: {},
             colon_is_active: false,
             emojiFilter: null,
-            emojiPosition: null,
-            customToolbar: [
-                { 'header': '1' },
-                { 'header': '2' },
-                'bold', 'italic', 
-                // 'underline',
-                // { 'list': 'ordered'}, 
-                // { 'list': 'bullet' },
-                'link'
-            ],
+            emojiPosition: null
         }
     },
     methods: {
+        input(e) {
+            if(typeof e == 'string')
+                this.element.options.text = e;
+        },
+
         focus() {
             this.$refs.inlineEditor.quill.focus();
         },
@@ -254,7 +267,7 @@ export default {
 
                 if(el){
                     el.has_text = el.options.text.length > 0;
-                    // this.saveElement(el);
+                    this.saveElement(el);
                 }
             }
         },
@@ -272,7 +285,7 @@ export default {
                     this.quill = {};
             }
 
-            // this.saveElement(e);
+            this.saveElement(e);
         },
 
         textChanged: function(ev, id){
@@ -286,9 +299,10 @@ export default {
                 e.focused = false;
 
             // Vue.set(this.elements, idx, e);
+            this.saveElement(e);
         },
 
-        selectionChanged: function(id, ev){
+        selectionChanged: function(ev){
             const e = this.element;
             var selected = ev && ev.length > 0;
             e.selected = selected;
@@ -317,7 +331,14 @@ export default {
                 toolbar.style.top = "-36px";
                 toolbar.style.left = 0;
             }
+
+            this.saveElement(e);
         },
+
+        saveElement(el){
+            // this.el = el;
+            // this.$emit('update:modelValue', el);
+        }
     }
 }
 </script>

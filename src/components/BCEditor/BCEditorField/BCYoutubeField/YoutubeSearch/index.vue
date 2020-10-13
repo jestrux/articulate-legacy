@@ -252,7 +252,7 @@
           })
       },
       selectVideo(url){
-        this.$emit("input", url)
+        this.$emit("update:modelValue", url)
       }
     }
   }

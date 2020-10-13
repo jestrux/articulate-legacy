@@ -116,7 +116,7 @@ export default {
                 return this.elements;
             },
             set: function(new_elements){
-                this.$emit('input', new_elements);
+                this.$emit('update:modelValue', new_elements);
             }
         }
     }

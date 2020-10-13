@@ -66,28 +66,25 @@ import BcImageField from "./BCImageField.vue";
 import BCYoutubeField from "./BCYoutubeField/index.vue";
 
 export default {
+    name: "BcEditorField",
     props: {
-        value : Object,
+        modelValue : Object,
         nolabel: Boolean
     },
     mounted: function(){
         const input = this.$refs.input;
         if(input) autosize(input);
 
-        if(this.value)
-            this.field = this.value;
-
-        // const parent = this.$root.$children[0];
-        // this.imageUploadUrl = parent.imageUploadUrl;
-        // this.unsplashClientId = parent.unsplashClientId;
-        // this.youtubeApiKey = parent.youtubeApiKey;
+        if(this.modelValue)
+            this.field = this.modelValue;
+        // console.log("Editor field: ", this.value);
     },
     watch: {
         field: {
             immediate: true, 
             deep: true,
             handler (newValue, oldVal) {
-                this.$emit('input', newValue);
+                this.$emit('update:modelValue', newValue);
             }
         }
     },

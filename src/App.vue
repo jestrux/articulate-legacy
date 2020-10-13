@@ -239,8 +239,6 @@
       :element="curelement"
       @save="saveElement"
       @cancel="cancelEditting"
-      :image-upload-url="imageUploadUrl"
-      :unsplash-client-id="unsplashClientId"
     />
 
     <bc-header @publish="publish(true)" :save="saving_result" />
@@ -322,31 +320,28 @@
           </span>
         </div>
 
-        <h1>No. of elements: {{ elements.length }}</h1>
-
         <div ref="content" class="blog-content" style="min-height: calc(100vh - 330px)">
-          <template v-for="(element, index) in elements">
-            <input :key="index" :placeholder="element.options.default" type="text" v-model="elements[index].text" />
-            <!-- <bc-text
-              :ref="`textEditor${element.id}`"
+          <template v-for="(element, index) in elements" :key="index">
+            <bc-text
               v-if="element.component == 'bc-text'"
-              :key="index"
-              v-model="elements[index]"
+              :ref="`textEditor${element.id}`"
+              :modelValue="element"
+              @update:modelValue="element = $event"
               @showOptions="showOptions(...$event)"
               @enterClicked="addAndFocusTextField(index)"
               @deleteClicked="deleteClickedOnTextField(index)"
               @upClicked="upClickedOnTextField(index)"
               @downClicked="downClickedOnTextField(index)"
-            /> -->
+            />
 
-            <!-- <bc-ui-element
+            <bc-ui-element
               v-else
               :key="element.id"
               :element="element"
               @input="element.options.html = $event"
               @editElement="editElement($event)"
               @removeElement="removeElement($event)"
-            /> -->
+            />
           </template>
         </div>
       </div>
@@ -367,8 +362,8 @@ import BCAside from "./components/BCAside.vue";
 import BCElementPicker from "./components/BCElementPicker.vue";
 
 import BCText from "./components/BCUIElement/BCText/index.vue";
-// import BCUIElement from "./components/BCUIElement/index.vue";
-// import BCEditor from "./components/BCEditor/index.vue";
+import BCUIElement from "./components/BCUIElement/index.vue";
+import BCEditor from "./components/BCEditor/index.vue";
 
 export default {
   props: {
@@ -734,8 +729,8 @@ export default {
     "bc-aside": BCAside,
     "bc-element-picker": BCElementPicker,
     "bc-text": BCText,
-    // "bc-editor": BCEditor,
-    // "bc-ui-element": BCUIElement,
+    "bc-editor": BCEditor,
+    "bc-ui-element": BCUIElement,
   },
 
   filters: {
