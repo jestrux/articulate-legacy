@@ -33,7 +33,7 @@
         border: none;
         cursor: pointer;
         text-transform: uppercase;
-        margin-right: 0.2em;
+        margin-left: 0.4rem;
         outline: none;
         letter-spacing: 0.15em;
         font-size: 0.65em;
@@ -155,9 +155,9 @@
                 v-else-if="youtubeApiKey && youtubeApiKey.length && source === 1" v-model="src"/>
         </div>
 
-        <div id="imageWrapper">
-            <iframe v-if="src !== null" width="100%" :height="videoHeight + 'px'" 
-                :src="embed" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div v-if="src !== null" id="imageWrapper">
+            <img :style="['width: 100%', {height:`${videoHeight}px`}]" 
+                :src="`https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`" />
         </div>
     </div>
 </template>
@@ -171,12 +171,10 @@ export default {
         url: String
     },
     mounted(){
-        const parent = this.$root.$children[0];
-        this.youtubeApiKey = parent.youtubeApiKey;
+        this.youtubeApiKey = _Articulate.options.youtubeApiKey;
 
         // set dynamic height for youtube video
         this.videoHeight = this.$el.getBoundingClientRect().width * 9 / 16;
-
         this.src = this.url && this.url.length ? this.url : null;
     },
     data() {
@@ -194,19 +192,22 @@ export default {
         src: {
             immediate: true, 
             handler (val, oldVal) {
-                if(val != null){
+                if(val != null)
                     this.$emit("update:modelValue", val);
-                    const match = this._parseYoutubeUrl(val);
-                    if(match)
-                        this.embed = `https://www.youtube.com/embed/${match[2]}?rel=0&amp;showinfo=0`;
-                }
             }
         }
     },
-    methods: {
-        _parseYoutubeUrl(url){
+    computed: {
+        videoId(){
+            if(!this.src)
+                return null;
+
             var reg = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
-            return url.match(reg);
+            const match = this.src.match(reg);
+            if(!match || !match[2])
+                return null;
+
+            return match[2];
         },
     },
     components: {

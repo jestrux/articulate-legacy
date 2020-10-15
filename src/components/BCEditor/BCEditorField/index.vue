@@ -42,7 +42,7 @@
             </option>
         </select>
 
-        <textarea v-else-if="field.type == 'long-text'" v-model="field.value" rows="5"></textarea>
+        <textarea v-else-if="field.type == 'long-text'" :placeholder="field.defaultValue" v-model="field.value" rows="5"></textarea>
 
         <vue-editor v-else-if="field.type == 'ws-text'" :editorToolbar="customToolbar" v-model="field.value"></vue-editor>
         
@@ -55,7 +55,7 @@
             v-else-if="field.type == 'youtube'" v-model="field.value"
             :url="field.value"/>
         
-        <textarea ref="input" v-else rows="1" :placeholder="field.default" v-model="field.value"></textarea>
+        <textarea ref="input" v-else rows="1" :placeholder="field.defaultValue" v-model="field.value"></textarea>
     </div>
 </template>
 

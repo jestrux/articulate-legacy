@@ -62,6 +62,8 @@
 
     #form{
         padding: 1em;
+        max-height: 400px;
+        overflow-y: auto;
     }
 
     #bcEditor.text-only #form{
@@ -107,7 +109,6 @@
                     :key="index">
 
                     <bc-editor-field
-                        :nolabel="element.component === 'bc-text'"
                         :modelValue="field"
                         @update:modelValue="field = $event"
                     />
@@ -124,7 +125,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import BCEditorField from './BCEditorField/index.vue';
 
 export default {
@@ -135,9 +135,10 @@ export default {
         },
         saveElement: function(element){
             const options = {};
-            _.each(this.fields, function (val, key) {
-                options[key] = val.value;
+            this.fields.forEach((field, index) => {
+                options[field.name] = field.value;
             });
+            
             element.options = options;
 
             this.$emit('save', element);
@@ -153,18 +154,23 @@ export default {
     },
     computed: {
         fields: function(){
-            return _.forIn(this.element.skeleton, (value, key) => {
-                const obj = {};
-                obj[key] = value;
+            const component = _Articulate.uiElements[this.element.component];
+            const fields = [];
 
-                if(!this.element.options && value.type == "choice" && (!obj[key].value || !obj[key].value.length)){
-                    obj[key].value = _.clone(value.default);
-                }
+            for (const key in component.skeleton) {
+                const {type, defaultValue, choices} = component.skeleton[key];
+                const field = {type, defaultValue, choices};
 
-                obj[key].name = key;
+                if(type.indexOf('text') == -1 && !this.element.options[key] && defaultValue !== null)
+                    field.value = defaultValue;
+                else if(this.element.options[key])
+                    field.value = this.element.options[key];
 
-                return obj;
-            });
+                field.name = key;
+                fields.push(field);
+            }
+
+            return fields;
         }
     },
     components: {

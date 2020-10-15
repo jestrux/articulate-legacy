@@ -97,10 +97,10 @@
       @keyup.enter="searchUnsplash($event.target.value)"/>
     
     <div id="movers" v-if="fetched && results.length > perPage">
-      <button :class="{'clickable' : page > 1}"
+      <button type="button" :class="{'clickable' : page > 1}"
         @click="page = page - 1">Prev</button>
       &emsp;
-      <button :class="{'clickable' : results.length > page * perPage}"
+      <button type="button" :class="{'clickable' : results.length > page * perPage}"
         @click="page = page+1">Next</button>
     </div>
 
@@ -183,7 +183,6 @@
           this.fetched = true;
           this.results = results;
           this.fetching = false;
-          // console.log("Api result", results);
         })
         .catch(err => {
           this.fetched = true;
@@ -193,7 +192,6 @@
         })
       },
       selectImage(url){
-        console.log("Image selected: ",);
         this.$emit("update:modelValue", url)
       }
     }
