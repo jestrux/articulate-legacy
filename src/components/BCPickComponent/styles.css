@@ -1,0 +1,91 @@
+.BcPickComponent:not(.inline){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.975);
+}
+
+.BcPickComponent #closer{
+    position: absolute;
+    top: 2em;
+    right: 2em;
+    border: none;
+    background: transparent;
+}
+
+.BcPickComponent.inline #closer{
+    display: none;
+}
+
+.BcPickComponent #label{
+    font-size: 1.1em;
+}
+
+.BcPickComponent:not(.inline) #bcEditor{
+    width: 500px;
+}
+
+.BcPickComponent #bcEditor{
+    background: #fff;
+    box-shadow: 0 1px 8px 0.5px rgba(0, 0, 0, 0.2);
+}
+
+.BcPickComponent #bcEditor.text-only{
+    border: none;
+}
+
+.BcPickComponent #label, 
+.BcPickComponent #buttons{
+    display: flex;
+    align-items: center;
+    background: #eee;
+    padding: 0.8em 1em;
+}
+
+.BcPickComponent #buttons{
+    border-top: 1px solid #eee;
+    background: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.BcPickComponent #bcEditor.text-only{
+    border-top: none;
+}
+
+.BcPickComponent #form{
+    padding: 1em;
+}
+
+.BcPickComponent #bcEditor.text-only #form{
+    padding: 0;
+}
+
+.BcPickComponent .editor-item + .editor-item{
+    margin-top: 0.8em;
+}
+
+.BcPickComponent button{
+    border: 1px solid #000;
+    background: #333;
+    color: #fff;
+    font-size: 0.85em;
+    padding: 0.31em 1.5em;
+    border-radius: 5px;
+    min-width: 90px;
+    text-transform: uppercase;
+}
+
+.BcPickComponent button:first-child{
+    background: transparent;
+    color: #555;
+    border-color: #999;
+    margin-right: 0.5em;
+}
