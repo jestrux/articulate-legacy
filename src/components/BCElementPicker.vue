@@ -113,11 +113,11 @@
                     <div class="element" v-for="(element, index) in elements" 
                         :title="element.name"
                         :key="index"
-                        @click="addElement(index)">
+                        @click="addElement(element)">
 
                         <i v-html="element.icon"></i>
 
-                        <label>{{element.name}}</label>
+                        <label>{{element.label}}</label>
                     </div>
                 </div>
             </div>
@@ -127,17 +127,37 @@
 
 <script>
 
-import _ from 'lodash'
-
 export default {
     props: {
-        elements: Array,
         showElements: Object
     },
 
+    mounted(){
+        const uiElements = Object.values(_Articulate.uiElements);
+        this.elements = uiElements.map(el => el);
+    },
+
+    data(){
+        return {
+            elements: []
+        }
+    },
+
     methods: {
-        addElement: function(idx){
-            var el = _.cloneDeep(this.elements[idx]);
+        addElement: function(component){
+            const options = {};
+            for (const key in component.skeleton) {
+                const element = component.skeleton[key];
+                options[key] = element.default;
+            }
+
+            const el = {
+                id: (Math.random() * 1e32).toString(36), // randomId
+                name: component.label,
+                component: component.name,
+                options
+            };
+
             this.$emit('add', el);
         },
 
