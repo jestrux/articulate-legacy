@@ -243,12 +243,20 @@
 
     <bc-header @publish="publish(true)" :save="saving_result" />
 
-    <bc-element-picker
+    <bc-element-picker v-if="inlinePicker"
       :show-elements="showChoices"
       @cancel="showChoices = {}"
       @add="addElement"
       :elements="choices"
     />
+
+    <template v-if="!inlinePicker">
+      <BcPickComponent 
+        :show="showPicker" 
+        @add="addElement"
+        @cancel="showPicker = false"
+      />
+    </template>
 
     <button
       title="Arrange Sections"
@@ -336,13 +344,13 @@
 
             <bc-ui-element
               v-else
-              :key="element.id"
               :element="element"
-              @input="element.options.html = $event"
               @editElement="editElement($event)"
               @removeElement="removeElement($event)"
             />
           </template>
+          <!-- @input="element.options.html = $event"
+           -->
         </div>
       </div>
     </div>
@@ -353,30 +361,24 @@
 import axios from "axios";
 import _ from "lodash";
 import formatDate from "date-fns/format";
-import { choices } from "./choices";
 import { db_blog } from "./blog";
 import autosize from "autosize";
 
 import BCHeader from "./components/BCHeader.vue";
 import BCAside from "./components/BCAside.vue";
 import BCElementPicker from "./components/BCElementPicker.vue";
+import BcPickComponent from "./components/BcPickComponent/index.vue";
 
 import BCText from "./components/BCUIElement/BCText/index.vue";
-import BCUIElement from "./components/BCUIElement/index.vue";
+import BCUIElement from "./components/BCUIElement/index.jsx";
+// import BCUIElement from "./components/BCUIElement/index-old.vue";
 import BCEditor from "./components/BCEditor/index.vue";
 
 export default {
   props: {
     blog: Object,
-    saveUrl: String,
-    imageUploadUrl: String,
-    unsplashClientId: String,
-    youtubeApiKey: String
+    saveUrl: String
   },
-  // provide: {
-  //     imageUploadUrl: this.imageUploadUrl,
-  //     unsplashClientId: this.unsplashClientId
-  // },
   data() {
     return {
       blogId: null,
@@ -386,15 +388,15 @@ export default {
       date: formatDate(new Date(), "yyyy-MM-ddTHH:mm:ss"),
       entry_idx: -1,
       html_text: "",
-      choices: choices,
       elements: [
-        { "name": "Text", "component": "bc-text", "options": { "text": "", "default": "Enter your post content here..." }, "label": "Text 0", "id": "zpkqiaacpi8000000000" },
-        { "name": "Text", "component": "bc-text", "options": { "text": "", "default": "Enter your post content here..." }, "label": "Text 0", "id": "zpkqiaacgsg000000000" }
+        
       ],
       editting: false,
       curelement: {},
       arranging: false,
       showChoices: {},
+      showPicker: false,
+      inlinePicker: _Articulate.options.inlinePicker,
       coverImageElement: {
         name: "Cover Image",
         label: "Cover Image",
@@ -445,9 +447,14 @@ export default {
         this.addBufferText();
     } catch (err) {
       this.title = "";
-      // this.elements = [];
-      //when creating new blogpost
-      // this.addBufferText();
+
+      // this.addElement(this.getEmptyImageElement(), false);
+      this.addBufferText();
+
+      setTimeout(() => {
+        // this.curelement = this.elements[0];
+        // this.editting = true;
+      }, 10);
     }
   },
 
@@ -463,6 +470,18 @@ export default {
         name: "Text",
         component: "bc-text",
         options: { text: "", default: text }
+      };
+    },
+
+    getEmptyImageElement: function() {
+      return {
+        "id":"128ihyaz3b9c000000000",
+        "label":"Image 0",
+        "component":"BcImage",
+        "options":{
+          "source":"https://images.unsplash.com/photo-1542690563-ca10289ac117?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjE2MTY1fQ",
+          "caption":"afasafa","width":"wide"
+        }
       };
     },
 
@@ -486,10 +505,13 @@ export default {
         status: true,
         position: { left: box.left, top: box.top }
       };
+      this.showPicker = true;
     },
 
     addElement(el, auto_edit = true, add_pos) {
       this.showChoices = {};
+      this.showPicker = false;
+
       if (el.component != "cover" && (!el.label || !el.label.length)) {
         let len = _.filter(this.elements, ["name", el.name]).length;
         el.label = el.name + " " + len;
@@ -731,6 +753,7 @@ export default {
     "bc-text": BCText,
     "bc-editor": BCEditor,
     "bc-ui-element": BCUIElement,
+    BcPickComponent
   },
 
   filters: {
