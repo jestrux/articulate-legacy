@@ -3,10 +3,14 @@
     }
 
     label{
+        text-transform: capitalize;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 0.7em;
+    }
+
+    label div{
+        margin-bottom: 0.4rem;
     }
 
     label:first-letter{
@@ -28,20 +32,22 @@
         display: inline-flex;
         align-items: center;
         border-radius: 30px;
-        padding: 0.5em 1em;
-        padding-right: 1.3em;
+        padding: 0 0.5rem;
+        padding-right: 1em;
+        height: 24px;
         border: 1px solid #ddd;
         cursor: pointer;
         text-transform: uppercase;
         margin-left: 0.4rem;
         outline: none;
         letter-spacing: 0.15em;
-        font-size: 0.65em;
-        background: #f8f8f8;
+        font-size: 0.6rem;
+        line-height: 1;
+        background: transparent;
     }
 
     button:not(.active):hover{
-        /* background: #e0e0e0; */
+        background: #fafafa;
     }
     
     button.active{
@@ -50,8 +56,8 @@
     }
 
     button svg{
-        width: 18px;
-        height: 18px;
+        width: 12px;
+        height: 12px;
         margin-right: 0.7em;
         margin-left: 0.2em;
     }
@@ -113,7 +119,7 @@
 <template>
     <div id="bcImageWrapper">
         <label>
-            Source
+            {{ label }}
             &nbsp;
 
             <div v-if="src === null && (imageUploadUrl || unsplashClientId)">
@@ -179,7 +185,8 @@ import UnsplashSearch from "./UnsplashSearch.vue";
 export default {
     name: "BcImageField",
     props: {
-        url: String
+        url: String,
+        label: String
     },
     mounted(){
         this.source = this.imageUploadUrl && this.imageUploadUrl.length ? 0 : 1;

@@ -1,12 +1,18 @@
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-solarizedlight.css';
+import hljs from 'highlight.js';
+import darkTheme from './dark-theme';
+import lightTheme from './light-theme';
 
 class BcCode {
-    static skeleton = {
+    static props = {
         language: {
             defaultValue: null,
             type: 'choice',
             choices: ['HTML', 'CSS', 'Javascript']
+        },
+        theme: {
+            defaultValue: "Dark",
+            type: 'choice',
+            choices: ['Dark', 'Light']
         },
         code: {
             defaultValue: 'Write code here',
@@ -15,31 +21,23 @@ class BcCode {
     }
 
     constructor(values) {
-        this.skeleton = BcCode.skeleton;
+        this.props = BcCode.props;
         this.values = values;
         this.render = () => BcCode.doRender(this.values);
     }
 
     static doRender(options, preview) {
-        const language = options.language.toLowerCase();
-
-        const code = Prism.highlight(options.code, Prism.languages[language], language);
+        const code = hljs.highlight(options.language, options.code).value;
         const margin = preview ? 'margin: -2rem;' : 'padding: 0 2rem';
+        const colors = options.theme == 'Dark' ? 'background: #353030; color: white;' : 'background: #f5f5f5;';
 
         return `
-            <div style="background: #f5f5f5;">
+            ${options.theme == 'Dark' ? darkTheme : lightTheme}
+            <div style="${colors}">
                 <div style="white-space: pre-wrap; ${margin}">
                     ${code}
                 </div>
             </div>
-        `;
-
-        return `
-            <pre>
-                <code class="language-${language}">
-                    ${options.code}
-                </code>
-            </pre>
         `;
     }
 
@@ -49,6 +47,7 @@ class BcCode {
     static preview = function () {
         return BcCode.doRender({
             language: 'CSS',
+            theme: 'Dark',
             code: `
             .blog-content blockquote {
                 margin: 1.5em 0;

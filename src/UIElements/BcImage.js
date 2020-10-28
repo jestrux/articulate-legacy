@@ -1,5 +1,5 @@
 class BcImage{
-    static skeleton = {
+    static props = {
         source: {
             defaultValue: null,
             type: 'image'
@@ -16,7 +16,7 @@ class BcImage{
     }
 
     constructor(values) {
-        this.skeleton = BcImage.skeleton;
+        this.props = BcImage.props;
         this.values = values;
         this.render = () => BcImage.doRender(this.values);
     }

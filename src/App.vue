@@ -401,7 +401,7 @@ export default {
         name: "Cover Image",
         label: "Cover Image",
         component: "cover",
-        skeleton: {
+        props: {
           url: {
             default: null,
             type: "image"

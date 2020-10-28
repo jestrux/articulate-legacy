@@ -1,5 +1,5 @@
 class BcQuote {
-    static skeleton = {
+    static props = {
         text: {
             defaultValue: 'Quote content goes here',
             type: 'long-text'
@@ -15,7 +15,7 @@ class BcQuote {
     }
 
     constructor(values) {
-        this.skeleton = BcQuote.skeleton;
+        this.props = BcQuote.props;
         this.values = values;
         this.render = () => BcQuote.doRender(this.values);
     }

@@ -56,8 +56,8 @@ export default {
         },
         submit: function(component){
             const options = {};
-            for (const key in component.skeleton) {
-                const element = component.skeleton[key];
+            for (const key in component.props) {
+                const element = component.props[key];
                 options[key] = element.default;
             }
 

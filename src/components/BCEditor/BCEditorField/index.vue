@@ -49,7 +49,9 @@
         <bc-image-field
             v-else-if="field.type == 'image'" 
             v-model="field.value"
-            :url="field.value"/>
+            :label="field.name"
+            :url="field.value"
+        />
         
         <bc-youtube-field
             v-else-if="field.type == 'youtube'" v-model="field.value"

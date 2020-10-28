@@ -35,6 +35,7 @@ export default {
     },
     mounted(){
         const uiElements = Object.values(_Articulate.uiElements);
+        console.log("UI Elements length: ", uiElements.length);
         this.elements = uiElements.map(el => (
             {
                 ...el, 
@@ -48,14 +49,20 @@ export default {
             elements: []
         }
     },
+    watch: {
+        show(newValue){
+            if(newValue && this.elements && this.elements.length == 1)
+                this.addEl(this.elements[0]);
+        }
+    },
     methods: {
         cancel: function(){
             this.$emit('cancel');
         },
         addEl: function(component){
             const options = {};
-            for (const key in component.skeleton) {
-                const element = component.skeleton[key];
+            for (const key in component.props) {
+                const element = component.props[key];
                 options[key] = element.default;
             }
 
@@ -70,6 +77,9 @@ export default {
         },
 
         enter: function (el, done) {
+            if(this.elements && this.elements.length == 1)
+                return done();
+
             const slideIn = el.animate([
 				{opacity: 0, transform: "translateY(20%)"},
 				{opacity: 1, transform: "none"}
@@ -81,6 +91,9 @@ export default {
         },
 
         leave: function (el, done) {
+            if(this.elements && this.elements.length == 1)
+                return done();
+                
             const slideOut = el.animate([
                 {transform: "none"},
 				{transform: "translateY(20%)"}

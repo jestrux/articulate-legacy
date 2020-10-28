@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Trivia</title>
+
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        #screens > div{
+            flex-shrink: 0;
+        }
+
+        .TemplateOneAnswer input:checked + label{
+            background: #fff;
+            color: #888888;
+        }
+
+        .TemplateTwoAnswer input:not(:checked) + label div{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="h-scree fle flex-co items-center py-12">
+        <div class="flex items-center justify-center mb-12">
+            <h1 class="text-center text-3xl tracking-widest uppercase font-hairline">
+                Tech trivia
+            </h1>
+            <button onclick="addItem()" class="ml-6 px-3 py-1 rounded-full uppercase text-xs tracking-widest text-red-500 bg-transparent border border-red-500">
+                Add Screen
+            </button>
+        </div>
+
+        <div class="w-full px-8 overflow-x-auto">
+            <div id="screens" style="height: 420px;" class="flex-1 flex space-x-8"></div>
+        </div>
+    </div>
+    
+    <script type="module" src="/src/main.js"></script>
+    
+    <script type="module">
+        import * as TriviaTemplates from './trivia-game/components';
+        window.addEventListener("load", () => {
+            window.articulate = new Articulate("#screens", {
+                lean: true,
+                editOnFocus: true,
+                unsplashClientId: "17ef130962858e4304efe9512cf023387ee5d36f0585e4346f0f70b2f9729964",
+                uiElements: {...TriviaTemplates},
+                onChange(html, elements){
+                    console.log("On change: ", html, elements);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function addItem(){
+            articulate.add();
+        }
+    </script>
+</body>
+
+</html>

@@ -36,7 +36,7 @@
   }
 
   #results{
-    margin-top: 0.8em;
+    margin-top: 0.4rem;
     columns:3;
     column-gap: 0.2em;
   }
@@ -68,7 +68,7 @@
     top: 0;
     height: 38px;
     right: 0;
-    padding: 0 0.8em;
+    padding: 0 0.5rem;
     display: flex;
     align-items: center;
   }
@@ -81,6 +81,8 @@
     padding: 0.25em 0.8em;
     background: transparent;
     outline: none;
+    font-size: 0.65rem;
+    margin-left: 0.6rem;
   }
 
   button:not(.clickable){
@@ -99,7 +101,7 @@
     <div id="movers" v-if="fetched && results.length > perPage">
       <button type="button" :class="{'clickable' : page > 1}"
         @click="page = page - 1">Prev</button>
-      &emsp;
+        
       <button type="button" :class="{'clickable' : results.length > page * perPage}"
         @click="page = page+1">Next</button>
     </div>

@@ -1,5 +1,5 @@
 class BcAlert {
-    static skeleton = {
+    static props = {
         type: {
             defaultValue: 'info',
             type: 'choice',
@@ -16,7 +16,7 @@ class BcAlert {
     }
 
     constructor(values) {
-        this.skeleton = BcAlert.skeleton;
+        this.props = BcAlert.props;
         this.values = values;
         this.render = () => BcAlert.doRender(this.values);
     }

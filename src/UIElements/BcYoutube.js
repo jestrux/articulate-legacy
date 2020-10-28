@@ -1,6 +1,3 @@
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-solarizedlight.css';
-
 function processYoutubeUrl(options){
     var reg = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
     const src = options.url || options.source;
@@ -18,7 +15,7 @@ function processYoutubeUrl(options){
 }
 
 class BcYoutube {
-    static skeleton = {
+    static props = {
         source: {
             defaultValue: null,
             type: 'youtube'
@@ -46,7 +43,7 @@ class BcYoutube {
     }
 
     constructor(values) {
-        this.skeleton = BcYoutube.skeleton;
+        this.props = BcYoutube.props;
         this.values = values;
         this.render = () => BcYoutube.doRender(this.values);
     }
