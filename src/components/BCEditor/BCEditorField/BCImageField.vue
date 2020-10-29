@@ -188,11 +188,12 @@ export default {
         url: String,
         label: String
     },
+    inject: ['Articulate'],
     mounted(){
         this.source = this.imageUploadUrl && this.imageUploadUrl.length ? 0 : 1;
         this.src = this.url && this.url.length ? this.url : null;
 
-        const { imageUploadUrl, unsplashClientId } = _Articulate.options;
+        const { imageUploadUrl, unsplashClientId } = this.Articulate.options;
         this.imageUploadUrl = imageUploadUrl;
         this.unsplashClientId = unsplashClientId;
     },

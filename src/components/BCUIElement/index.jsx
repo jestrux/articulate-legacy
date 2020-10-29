@@ -5,9 +5,15 @@ export default {
         element: Object
     },
 
+    inject: ['Articulate'],
+
     render(){
-        const { element, $emit } = this;
+        const { element, $emit, Articulate } = this;
         const { id, component, options } = element;
+
+        const uiComponentClass = Articulate.uiElements[component];
+        const uiComponent = new uiComponentClass(options);
+        const editOnFocus = Articulate.options.editOnFocus;
 
         function renderActionButtons(){
             let className = "component-editor-buttons"; 
@@ -36,8 +42,6 @@ export default {
                     baseClass += ' full-image';
             }
         
-            const uiComponent = new window._Articulate.uiElements[component](options);
-        
             return (
                 <div class={baseClass}>
                     <div class="component-wrapper" style="position: relative;">
@@ -53,13 +57,11 @@ export default {
         }
 
         function renderLeanElement(){
-            const uiComponent = new window._Articulate.uiElements[component](options);
-            const editOnFocus = _Articulate.options.editOnFocus;
             if(editOnFocus){
                 return (
                     h( "div", { 
                         innerHTML: uiComponent.render(),
-                        class: window._Articulate.options.className,
+                        class: Articulate.options.className,
                         onClick: editOnFocus ? () => $emit('editElement', element) : null
                     })
                 );
@@ -69,7 +71,7 @@ export default {
                 <div style="position: relative;">
                     { renderActionButtons() }
                     {  h( "div", { 
-                            class: window._Articulate.options.className,
+                            class: Articulate.options.className,
                             innerHTML: uiComponent.render() 
                         }) 
                     }
@@ -77,7 +79,7 @@ export default {
             );
         }
 
-        if(!window._Articulate.options.lean)
+        if(!Articulate.options.lean)
             return renderBasicElement(element, $emit);
         else
             return renderLeanElement(element, $emit);

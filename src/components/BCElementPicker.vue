@@ -131,9 +131,9 @@ export default {
     props: {
         showElements: Object
     },
-
+    inject: ['Articulate'],
     mounted(){
-        const uiElements = Object.values(_Articulate.uiElements);
+        const uiElements = Object.values(this.Articulate.uiElements);
         this.elements = uiElements.map(el => el);
     },
 

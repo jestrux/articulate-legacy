@@ -2,8 +2,9 @@ import { h } from 'vue';
 
 export default {
     name: "BcPickComponent",
+    inject: ['Articulate'],
     render(){
-        const uiElements = Object.values(_Articulate.uiElements);
+        const uiElements = Object.values(this.Articulate.uiElements);
         
         return (
             <div class={`BcPickComponent ${this.show ? 'open' : ''}`}>

@@ -15,26 +15,14 @@
 <body>
   <div id="article"></div>
 
-  <button onclick="addItem()">Add Item</button>
   <script type="module" src="/src/main.js"></script>
 
-  <script type="module">
-    import { BcYoutube } from '/src/UIElements';
+  <script>
     window.addEventListener("load", () => {
-      window.articulate = new Articulate("#article", {
-        inlinePicker: false,
-        lean: true,
-        editOnFocus: true,
-        unsplashClientId: "17ef130962858e4304efe9512cf023387ee5d36f0585e4346f0f70b2f9729964",
-        uiElements: {BcYoutube}
+      new Articulate("#article", {
+        unsplashClientId: "17ef130962858e4304efe9512cf023387ee5d36f0585e4346f0f70b2f9729964"
       });
     });
-  </script>
-
-  <script>
-    function addItem(){
-      articulate.add();
-    }
   </script>
 </body>
 

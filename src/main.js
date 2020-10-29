@@ -3,11 +3,8 @@ import App from "./App.vue";
 import LeanApp from "./LeanApp.vue";
 import './index.css';
 
-function Articulate(containerId, options){
+function Articulate(containerId, options = {}){
     this.options = options;
-    
-    window._Articulate = this;
-
     initArticulate(containerId, this);
 }
 
@@ -17,11 +14,15 @@ async function initArticulate(containerId, _articulate){
     if(!_articulate.options.lean){
         const UIELements = await import("./UIElements");
         _articulate.uiElements = { ...UIELements };
-        const app = createApp(App).mount(containerId);
+        const app = createApp(App);
+        app.provide('Articulate', _articulate);
+        app.mount(containerId)
     }
     else{
         _articulate.uiElements = {..._articulate.options.uiElements};
-        const vm = createApp(LeanApp).mount(containerId);
+        const app = createApp(LeanApp);
+        app.provide('Articulate', _articulate);
+        const vm = app.mount(containerId);
         _articulate.add = () => vm.addItem();
     }
 }

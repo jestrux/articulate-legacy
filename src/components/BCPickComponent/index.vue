@@ -33,8 +33,9 @@ export default {
     props: {
         show: Boolean
     },
+    inject: ['Articulate'],
     mounted(){
-        const uiElements = Object.values(_Articulate.uiElements);
+        const uiElements = Object.values(this.Articulate.uiElements);
         console.log("UI Elements length: ", uiElements.length);
         this.elements = uiElements.map(el => (
             {

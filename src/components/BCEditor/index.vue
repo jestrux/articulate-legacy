@@ -222,9 +222,10 @@ export default {
             default: false
         }
     },
+    inject: ['Articulate'],
     computed: {
         onTheSide: function(){
-            if(_Articulate && _Articulate.options && _Articulate.options.editOnFocus)
+            if(this.Articulate && this.Articulate.options && this.Articulate.options.editOnFocus)
                 return true;
 
             return false;
@@ -233,7 +234,7 @@ export default {
             if(!this.element || !this.element.component)
                 return [];
 
-            const component = _Articulate.uiElements[this.element.component];
+            const component = this.Articulate.uiElements[this.element.component];
 
             if(!component)
                 return [];

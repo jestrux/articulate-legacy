@@ -34,6 +34,7 @@ import BCUIElement from "./components/BCUIElement/index.jsx";
 import BCEditor from "./components/BCEditor/index.vue";
 
 export default {
+  inject: ['Articulate'],
   data() {
     return {
       blogId: null,
@@ -180,8 +181,8 @@ export default {
         this.autosave();
 
         this.$nextTick(() => {
-          if(window._Articulate.options.onChange)
-            window._Articulate.options.onChange(this.html_text, this.elements);
+          if(this.Articulate.options.onChange)
+            this.Articulate.options.onChange(this.html_text, this.elements);
         });
       }
     }

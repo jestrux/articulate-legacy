@@ -274,31 +274,14 @@
 
     <div id="content">
       <div id="insightBody">
-        <div
-          id="insightImage"
-          v-if="cover != null"
+        <div id="insightImage" v-if="cover != null"
           :class="['blogpost-section-wrapper', 'cover-image-' + cover.options.width]"
         >
-          <div class="component-editor-buttons">
-            <button class="component-editor-button" @click="editElement(cover)">
-              <svg fill="#f18f16" viewBox="0 0 24 24">
-                <path
-                  d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
-                />
-                <path d="M0 0h24v24H0z" fill="none" />
-              </svg>
-            </button>
-            <button class="component-editor-button" @click="removeCoverImage()">
-              <svg fill="#e04b2a" viewBox="0 0 24 24">
-                <path
-                  d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                />
-                <path d="M0 0h24v24H0z" fill="none" />
-              </svg>
-            </button>
-          </div>
-
-          <img :src="cover.options.url" alt />
+          <bc-ui-element
+            :element="cover"
+            @editElement="editElement(cover)"
+            @removeElement="removeCoverImage()"
+          />
         </div>
 
         <div class="blogpost-section-wrapper">
@@ -379,6 +362,7 @@ export default {
     blog: Object,
     saveUrl: String
   },
+  inject: ['Articulate'],
   data() {
     return {
       blogId: null,
@@ -396,22 +380,11 @@ export default {
       arranging: false,
       showChoices: {},
       showPicker: false,
-      inlinePicker: _Articulate.options.inlinePicker,
       coverImageElement: {
         name: "Cover Image",
         label: "Cover Image",
-        component: "cover",
-        props: {
-          url: {
-            default: null,
-            type: "image"
-          },
-          width: {
-            default: "wide",
-            type: "choice",
-            choices: ["normal", "wide", "full"]
-          }
-        }
+        component: "BcImage",
+        options: {}
       },
       saving: false,
       saving_result: {
@@ -457,7 +430,14 @@ export default {
       }, 10);
     }
   },
+  computed: {
+    inlinePicker(){
+      if(!this.Articulate)
+        return false;
 
+      return this.Articulate.options.inlinePicker;
+    }
+  },
   methods: {
     getEmptyTextElement: function() {
       const text =
@@ -512,7 +492,7 @@ export default {
       this.showChoices = {};
       this.showPicker = false;
 
-      if (el.component != "cover" && (!el.label || !el.label.length)) {
+      if (el.name != "Cover Image" && (!el.label || !el.label.length)) {
         let len = _.filter(this.elements, ["name", el.name]).length;
         el.label = el.name + " " + len;
       }
@@ -569,7 +549,7 @@ export default {
       this.editting = false;
 
       if (!e) return;
-      if (e.component === "cover") {
+      if (e.name === "Cover Image") {
         this.cover = e;
         this.curelement = {};
         this.publish();
@@ -662,6 +642,9 @@ export default {
     },
 
     publish: function(with_date) {
+      if(!this.saveUrl || !this.saveUrl.length)
+        return;
+        
       this.saving_result = {};
       this.setHtml();
       let elements = _.cloneDeep(this.elements);

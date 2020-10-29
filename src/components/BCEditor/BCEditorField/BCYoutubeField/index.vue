@@ -170,8 +170,9 @@ export default {
     props: {
         url: String
     },
+    inject: ['Articulate'],
     mounted(){
-        this.youtubeApiKey = _Articulate.options.youtubeApiKey;
+        this.youtubeApiKey = this.Articulate.options.youtubeApiKey;
 
         // set dynamic height for youtube video
         this.videoHeight = this.$el.getBoundingClientRect().width * 9 / 16;
