@@ -64,7 +64,7 @@ Since articulate was initially intended for articles and blogs, it's default UI 
 </script>
 ```
 
-This code was taken from the trivia code game demo found ["here"](/public/demos/trivia-game/index.html) and which looks like this 👇
+This code was taken from the trivia code game demo found [here](/public/demos/trivia-game/index.html) and which looks like this 👇
 
 ![Nerd Trivia](/screenshots/nerd-trivia.jpg?raw=true "Nerd Trivia")
 
