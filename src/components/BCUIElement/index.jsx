@@ -59,6 +59,7 @@ export default {
                 return (
                     h( "div", { 
                         innerHTML: uiComponent.render(),
+                        class: window._Articulate.options.className,
                         onClick: editOnFocus ? () => $emit('editElement', element) : null
                     })
                 );
@@ -67,7 +68,11 @@ export default {
             return (
                 <div style="position: relative;">
                     { renderActionButtons() }
-                    {  h( "div", { innerHTML: uiComponent.render() }) }
+                    {  h( "div", { 
+                            class: window._Articulate.options.className,
+                            innerHTML: uiComponent.render() 
+                        }) 
+                    }
                 </div>
             );
         }

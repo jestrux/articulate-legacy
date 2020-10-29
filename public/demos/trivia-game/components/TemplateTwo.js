@@ -1,7 +1,7 @@
 class TemplateTwo {
     static props = {
         theme: {
-            defaultValue: 'purple',
+            defaultValue: 'orange',
             type: 'choice',
             choices: ['purple', 'green', 'orange', 'red', 'blue', 'pink']
         },
@@ -39,7 +39,7 @@ class TemplateTwo {
     }
 
     static doRender(options) {
-        console.log("Options: ", options);
+        // console.log("Options: ", options);
         function getAnswerTemplate(fieldName, answer, value){
             if(!answer || !answer.length) return '';
 

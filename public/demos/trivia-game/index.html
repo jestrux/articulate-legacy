@@ -10,8 +10,10 @@
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 
     <style>
-        #screens > div{
+        #screens .TriviaCard{
             flex-shrink: 0;
+            width: 25%;
+            min-width: 300px;
         }
 
         .TemplateOneAnswer input:checked + label{
@@ -21,6 +23,18 @@
 
         .TemplateTwoAnswer input:not(:checked) + label div{
             display: none;
+        }
+
+        .TemplateThreeAnswer input:checked + label{
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .TemplateThreeAnswer input:checked + label > div{
+            border-color: #fff;
+        }
+
+        .TemplateThreeAnswer input:not(:checked) + label > div > div{
+            background: transparent;
         }
     </style>
 </head>
@@ -51,6 +65,7 @@
                 editOnFocus: true,
                 unsplashClientId: "17ef130962858e4304efe9512cf023387ee5d36f0585e4346f0f70b2f9729964",
                 uiElements: {...TriviaTemplates},
+                className: "TriviaCard",
                 onChange(html, elements){
                     console.log("On change: ", html, elements);
                 }
