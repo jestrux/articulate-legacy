@@ -72,7 +72,7 @@ This code was taken from the trivia code game demo found ["here"](/public/demos/
 ## Other Customizations
 
 |Prop|Description|Default|
-|--|--|
+|--|--|--|
 |`editOnFocus`| Whether to edit on focus or when edit button is clicked | false |
 
 ## Contribution
