@@ -232,109 +232,107 @@
 </style>
 
 <template>
-  <div>
-    <bc-editor
-      v-if="editting"
-      :editting="editting"
-      :element="curelement"
-      @save="saveElement"
-      @cancel="cancelEditting"
-    />
+  <bc-editor
+    v-if="editting"
+    :editting="editting"
+    :element="curelement"
+    @save="saveElement"
+    @cancel="cancelEditting"
+  />
 
-    <bc-header @publish="publish(true)" :save="saving_result" />
+  <bc-header @publish="publish(true)" :save="saving_result" />
 
-    <bc-element-picker v-if="inlinePicker"
-      :show-elements="showChoices"
-      @cancel="showChoices = {}"
+  <bc-element-picker v-if="inlinePicker"
+    :show-elements="showChoices"
+    @cancel="showChoices = {}"
+    @add="addElement"
+    :elements="choices"
+  />
+
+  <template v-if="!inlinePicker">
+    <BcPickComponent 
+      :show="showPicker" 
       @add="addElement"
-      :elements="choices"
+      @cancel="showPicker = false"
     />
+  </template>
 
-    <template v-if="!inlinePicker">
-      <BcPickComponent 
-        :show="showPicker" 
-        @add="addElement"
-        @cancel="showPicker = false"
-      />
-    </template>
+  <button
+    title="Arrange Sections"
+    id="openArranger"
+    v-if="elements.length > 1 && !arranging"
+    @click="arranging = true"
+  >
+    <svg width="18" height="18" viewBox="0 0 24 24">
+      <path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z" />
+      <path d="M0 0h24v24H0z" fill="none" />
+    </svg>
+  </button>
 
-    <button
-      title="Arrange Sections"
-      id="openArranger"
-      v-if="elements.length > 1 && !arranging"
-      @click="arranging = true"
-    >
-      <svg width="18" height="18" viewBox="0 0 24 24">
-        <path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z" />
-        <path d="M0 0h24v24H0z" fill="none" />
-      </svg>
-    </button>
+  <bc-aside v-if="arranging" @cancel="arranging = false" v-model="elements" :elements="elements"></bc-aside>
 
-    <bc-aside v-if="arranging" @cancel="arranging = false" v-model="elements" :elements="elements"></bc-aside>
+  <div id="content">
+    <div id="insightBody">
+      <div id="insightImage" v-if="cover != null"
+        :class="['blogpost-section-wrapper', 'cover-image-' + cover.options.width]"
+      >
+        <bc-ui-element
+          :element="cover"
+          @editElement="editElement(cover)"
+          @removeElement="removeCoverImage()"
+        />
+      </div>
 
-    <div id="content">
-      <div id="insightBody">
-        <div id="insightImage" v-if="cover != null"
-          :class="['blogpost-section-wrapper', 'cover-image-' + cover.options.width]"
-        >
-          <bc-ui-element
-            :element="cover"
-            @editElement="editElement(cover)"
-            @removeElement="removeCoverImage()"
-          />
-        </div>
-
-        <div class="blogpost-section-wrapper">
-          <div id="insightTitle">
-            <div class="component-editor-buttons" v-if="cover === null">
-              <button class="component-editor-button show-options" @click="addCoverImage()">
-                <svg width="24" height="24" viewBox="0 0 24 24">
-                  <path
-                    d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"
-                  />
-                </svg>
-              </button>
-            </div>
-            <textarea id="blogTitle" v-model="title" placeholder="Enter post title here" rows="1" />
-
-            <!-- <h5><span class="taggy-item">BUSINESS GROWTH</span><span class="taggy-item">TECHNOLOGY</span></h5> -->
+      <div class="blogpost-section-wrapper">
+        <div id="insightTitle">
+          <div class="component-editor-buttons" v-if="cover === null">
+            <button class="component-editor-button show-options" @click="addCoverImage()">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <path
+                  d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"
+                />
+              </svg>
+            </button>
           </div>
-          <span id="insightDate">
-            <!-- Published {{date | formatDate}} -->
-            By
-            <input
-              type="text"
-              placeholder="Enter author's name here"
-              v-model="author"
-              @keyup="autosave()"
-            />
-          </span>
-        </div>
+          <textarea id="blogTitle" v-model="title" placeholder="Enter post title here" rows="1" />
 
-        <div ref="content" class="blog-content" style="min-height: calc(100vh - 330px)">
-          <template v-for="(element, index) in elements" :key="index">
-            <bc-text
-              v-if="element.component == 'bc-text'"
-              :ref="`textEditor${element.id}`"
-              :modelValue="element"
-              @update:modelValue="element = $event"
-              @showOptions="showOptions(...$event)"
-              @enterClicked="addAndFocusTextField(index)"
-              @deleteClicked="deleteClickedOnTextField(index)"
-              @upClicked="upClickedOnTextField(index)"
-              @downClicked="downClickedOnTextField(index)"
-            />
-
-            <bc-ui-element
-              v-else
-              :element="element"
-              @editElement="editElement($event)"
-              @removeElement="removeElement($event)"
-            />
-          </template>
-          <!-- @input="element.options.html = $event"
-           -->
+          <!-- <h5><span class="taggy-item">BUSINESS GROWTH</span><span class="taggy-item">TECHNOLOGY</span></h5> -->
         </div>
+        <span id="insightDate">
+          <!-- Published {{date | formatDate}} -->
+          By
+          <input
+            type="text"
+            placeholder="Enter author's name here"
+            v-model="author"
+            @keyup="autosave()"
+          />
+        </span>
+      </div>
+
+      <div ref="content" class="blog-content" style="min-height: calc(100vh - 330px)">
+        <template v-for="(element, index) in elements" :key="index">
+          <bc-text
+            v-if="element.component == 'bc-text'"
+            :ref="`textEditor${element.id}`"
+            :modelValue="element"
+            @update:modelValue="element = $event"
+            @showOptions="showOptions(...$event)"
+            @enterClicked="addAndFocusTextField(index)"
+            @deleteClicked="deleteClickedOnTextField(index)"
+            @upClicked="upClickedOnTextField(index)"
+            @downClicked="downClickedOnTextField(index)"
+          />
+
+          <bc-ui-element
+            v-else
+            :element="element"
+            @editElement="editElement($event)"
+            @removeElement="removeElement($event)"
+          />
+        </template>
+        <!-- @input="element.options.html = $event"
+          -->
       </div>
     </div>
   </div>
@@ -583,29 +581,32 @@ export default {
           this.elements.splice(add_pos, 0, e);
         } else {
           console.log("Saving at the end....");
-          if (
-            !not_edited &&
-            last_element &&
-            last_element.component == "bc-text" &&
-            last_element.options.text == ""
-          ) {
-            this.elements.pop();
-          } else {
-            this.saveElement(last_element);
-          }
-          if (this.entry_idx != -1) {
-            this.elements.splice(this.entry_idx, 1, e);
-          } else {
+          // if (
+          //   !not_edited &&
+          //   last_element &&
+          //   last_element.component == "bc-text" &&
+          //   last_element.options.text == ""
+          // ) {
+          //   this.elements.pop();
+          // } else {
+          //   this.saveElement(last_element);
+          // }
+          // if (this.entry_idx != -1)
+          //   // this.elements.splice(this.entry_idx, 1, e);
+          //   this.elements.splice(this.entry_idx, 0, e);
+          // else
             this.elements.push(e);
-          }
+            
           if (e.component != "bc-text") {
             console.log("Save idx: ", idx, this.elements.length - 1);
             if (!not_edited) {
               if (this.entry_idx != -1)
-                this.addAndFocusTextField(this.entry_idx + 1);
-              else this.addAndFocusTextField(this.entry_idx + 1);
-            } else if (e.component === "bc-separator")
-              this.addAndFocusTextField(this.elements.length);
+                this.addAndFocusTextField(this.entry_idx + 2);
+              else 
+                this.addAndFocusTextField(this.entry_idx + 2);
+            } 
+            else if (e.component === "bc-separator")
+              this.addAndFocusTextField(this.elements.length + 1);
             this.autosave();
           }
           this.entry_idx = -1;
