@@ -8,7 +8,7 @@
   "dependencies": {
     "EventEmitter": "^1.0.0",
     "autosize": "^4.0.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "date-fns": "^2.15.0",
     "highlight.js": "^10.2.1",
     "lodash": "^4.17.19",
